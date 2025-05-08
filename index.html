@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Enterprises LLC - A Total Build Company</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif; /* Tailwind's default sans-serif font */
+            margin: 0; /* Reset default margin */
+        }
+
+        /* Hero Animation */
+        .hero-title {
+            animation: slideInFromLeft 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .hero-slogan {
+            animation: fadeIn 1s ease-out 1s forwards; /* Starts 1s after title */
+            opacity: 0;
+        }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Ensure videos fill their containers nicely */
+        .video-tile video, .promo-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures video covers the area, might crop */
+        }
+
+        /* Styling for the Our Work video tile text overlay */
+        .video-tile-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: flex-start; /* Vertically align to the top */
+            justify-content: center; /* Horizontally center */
+            background-color: rgba(0, 0, 0, 0.1); /* Very subtle dark overlay for text visibility */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for hover */
+            padding-top: 1rem; /* Padding from the top */
+        }
+        .video-tile-overlay:hover {
+            background-color: rgba(0, 0, 0, 0.3); /* Darken overlay slightly on hover */
+        }
+        .video-tile-overlay h3 {
+            font-size: 1.5rem; /* 24px */
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8); /* Stronger shadow for visibility */
+        }
+
+        /* Smooth scroll for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Audio Button Style */
+        #audioButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000; /* Ensure it's above other content */
+            background-color: #1f2937; /* Tailwind gray-800 */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #audioButton:hover {
+            background-color: #374151; /* Tailwind gray-700 */
+        }
+        #audioButton svg { /* Style for the SVG icon inside the button */
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Section Padding - consistent spacing for sections */
+        section {
+            padding-top: 4rem; /* 64px */
+            padding-bottom: 4rem; /* 64px */
+        }
+        #hero { /* Hero section usually doesn't need top padding */
+            padding-top: 0;
+        }
+        
+        /* Gallery image styling for hover and click effect */
+        .gallery-item img {
+            cursor: pointer; /* Indicate images are clickable */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-item:hover img:not(.clicked) { /* Apply hover only if not in clicked state */
+            transform: scale(1.05); 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .gallery-item img.clicked { /* Style for when image is clicked */
+            transform: scale(1.1); /* Larger scale on click */
+            box-shadow: 0 15px 25px -5px rgba(0,0,0,0.2), 0 8px 10px -6px rgba(0,0,0,0.1);
+            z-index: 10; /* Bring clicked image to front if overlapping */
+            position: relative; /* Needed for z-index to work properly */
+        }
+
+
+        /* Style for the promo video container to ensure aspect ratio */
+        .promo-video .aspect-video-container { /* Container for the promo video to maintain aspect ratio */
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio (height / width * 100) */
+            height: 0; /* Collapse the div height, padding-bottom creates the space */
+            overflow: hidden; /* Hide anything that goes outside */
+            background-color: #000; /* Black background while video loads */
+        }
+        .promo-video .aspect-video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the area, may crop */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <audio id="backgroundAudio" loop>
+        <source src="assets/audio/roads.mp3" type="audio/mpeg">
+        Your browser does not support the audio element. This website uses background music.
+    </audio>
+
+    <button id="audioButton" aria-label="Toggle Background Music">
+        </button>
+
+    <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-white bg-gray-900 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="assets/images/hero.png" alt="Satisfied customers and quality concrete work by White Enterprises LLC" class="w-full h-full object-cover opacity-50">
+            <img src="https://placehold.co/1920x1080/333333/FFFFFF?text=White+Enterprises+LLC+Hero" alt="Placeholder Hero Background" class="w-full h-full object-cover opacity-50" onerror="this.style.display='none'; this.previousElementSibling.style.display='none'; this.style.display='block';" style="display:none;">
+        </div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full max-w-7xl p-8 md:p-12">
+            <div class="lg:w-1/2 text-center lg:text-left mb-10 lg:mb-0">
+                <h1 class="hero-title text-5xl md:text-6xl lg:text-7xl font-bold mb-4">White Enterprises LLC</h1>
+                <p class="hero-slogan text-2xl md:text-3xl mb-8">A total build company</p> 
+                
+                <div class="bg-black bg-opacity-50 p-6 rounded-lg shadow-xl mb-8 max-w-xl mx-auto lg:mx-0">
+                    <p class="text-lg md:text-xl leading-relaxed">
+                        We at White Enterprises LLC pride ourselves on our Craftsmanship, Honesty and Integrity. Our goal is to bring you the best product for the most affordable price. "We Build it!"
+                    </p>
+                </div>
+
+                <a href="#our-work" class="block relative w-full max-w-md h-56 md:h-64 rounded-lg overflow-hidden shadow-2xl mx-auto lg:mx-0 group video-tile">
+                    <video autoplay loop muted playsinline poster="https://placehold.co/640x360/1f2937/4b5563?text=Loading+Preview...">
+                        <source src="assets/videos/welogo4k.mp4" type="video/mp4">
+                        Your browser does not support the video tag. This video showcases our work.
+                    </video>
+                    <div class="video-tile-overlay">
+                        <h3>Our Work</h3>
+                    </div>
+                </a>
+            </div>
+
+            <div class="lg:w-1/3 flex flex-col space-y-6 items-center lg:items-end">
+                <a href="#about" class="bg-white text-gray-800 hover:bg-gray-200 transition-colors duration-300 font-semibold py-4 px-8 rounded-lg shadow-lg w-64 text-center text-xl">
+                    About Us
+                </a>
+                <a href="#our-work" class="bg-white text-gray-800 hover:bg-gray-200 transition-colors duration-300 font-semibold py-4 px-8 rounded-lg shadow-lg w-64 text-center text-xl">
+                    Our Work
+                </a>
+                <a href="#contact" class="bg-white text-gray-800 hover:bg-gray-200 transition-colors duration-300 font-semibold py-4 px-8 rounded-lg shadow-lg w-64 text-center text-xl">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="bg-white py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">About White Enterprises LLC</h2>
+            <div class="bg-gray-50 p-8 rounded-lg shadow-lg mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Our Mission</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    We at White Enterprises LLC pride ourselves on our Craftsmanship, Honesty and Integrity. Our goal is to bring you the best product for the most affordable price. "We Build it!"
+                </p>
+            </div>
+            
+            <div class="bg-gray-50 p-8 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-6">Services We Provide</h3>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4 text-lg text-gray-700">
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Concrete</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Block</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Metal Framing</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Wood Framing</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Soffits</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Roofs</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Property Management</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Drywall</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Painting</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Insulation</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Demo</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Trim</li>
+                    <li class="flex items-center"><svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Decks</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="our-work" class="bg-gray-200 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Our Work Showcase</h2>
+
+            <div class="mb-16 shadow-xl rounded-lg overflow-hidden bg-black promo-video">
+                <div class="aspect-video-container"> <video id="promoPlayer" loop controls poster="https://placehold.co/1280x720/1f2937/4b5563?text=Loading+Promo+Video...">
+                        <source src="assets/videos/wepromo.mp4" type="video/mp4">
+                        Your browser does not support the video tag. This video highlights our recent projects.
+                    </video>
+                </div>
+                <div class="bg-gray-800 p-4 text-center">
+                    <button id="mutePromoVideoButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                        Mute Video </button>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-semibold text-center text-gray-800 mb-4">A Recent Total Remodel in Lexington, Kentucky</h3>
+            <p class="text-lg text-center text-gray-600 mb-12">Browse through examples of our craftsmanship and attention to detail. Click an image to enlarge.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/a-new-door-install.jpg" alt="A New Door Installation" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Door+Install';">
+                    <div class="p-4">
+                        <p class="text-gray-700">A New Door Installation</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/2.jpg" alt="A cozy living room" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Living+Room';">
+                    <div class="p-4">
+                        <p class="text-gray-700">A cozy living room.</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/5.jpg" alt="Modern Galley Kitchen" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Kitchen';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Modern Galley Kitchen</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/9.jpg" alt="Elegant Vanity and Mirror" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Vanity';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Elegant Vanity and Mirror</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/10.jpg" alt="Luxurious Glass Shower Detail" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Shower';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Luxurious Glass Shower Detail</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/11.jpg" alt="Modern Bathroom with Marble Shower and Vanity" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Bathroom';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Modern Bathroom with Marble Shower and Vanity</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/13.jpg" alt="Guest Bedroom with Dark Wood Bed Frame" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Bedroom+1';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Guest Bedroom with Dark Wood Bed Frame</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/14.jpg" alt="Serene Bedroom with White Bedding" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Bedroom+2';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Serene Bedroom with White Bedding</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/afterhandrail.jpg" alt="Handrail Installation - After" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Handrail+After';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Handrail Installation - After</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/beforehandreail.jpg" alt="Handrail Installation - Before" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Handrail+Before';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Handrail Installation - Before</p>
+                    </div>
+                </div>
+                 <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/gallery-11.jpeg" alt="Placeholder Image 11" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Gallery+Image+11';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Detailed Interior Work</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/gallery-12.jpeg" alt="Placeholder Image 12" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Gallery+Image+12';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Custom Construction Feature</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/gallery-13.jpeg" alt="Placeholder Image 13" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Gallery+Image+13';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Exterior Project Example</p>
+                    </div>
+                </div>
+                <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/gallery-14.jpeg" alt="Placeholder Image 14" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Gallery+Image+14';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Renovation Detail</p>
+                    </div>
+                </div>
+                 <div class="gallery-item bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="assets/images/gallery-15.jpeg" alt="Placeholder Image 15" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Gallery+Image+15';">
+                    <div class="p-4">
+                        <p class="text-gray-700">Another Quality Finish</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="relative bg-gray-800 text-white py-20 px-4 sm:px-6 lg:px-8">
+        <div class="absolute inset-0 z-0 opacity-20">
+            <img src="assets/images/contact-bg.jpg" alt="Comfortable and professional office setting for consultation" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1200x800/e2e8f0/333333?text=Contact+Us+Background';">
+        </div>
+
+        <div class="max-w-3xl mx-auto text-center relative z-10">
+            <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
+            <p class="text-xl text-gray-300 mb-10">
+                Ready to start your next project or have a question for us? We'd love to hear from you.
+            </p>
+            
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-xl">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-semibold text-white mb-2">Email Us</h3>
+                    <a href="mailto:whiteenterprises316@gmail.com" class="text-blue-400 hover:text-blue-300 text-xl transition-colors">
+                        whiteenterprises316@gmail.com
+                    </a>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-semibold text-white mb-3">Connect With Us</h3>
+                    <a href="https://facebook.com/YourPageName" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-lg">
+                        <i class="fab fa-facebook-f mr-2"></i> Visit Our Facebook Page
+                    </a>
+                    <p class="mt-2 text-sm text-gray-400">(Remember to update this link with your actual Facebook page URL)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 text-center py-8">
+        <p>&copy; <span id="currentYear"></span> White Enterprises LLC. All Rights Reserved.</p>
+        <p>A Total Build Company.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // --- Audio Player Logic ---
+            const audioPlayer = document.getElementById('backgroundAudio');
+            const audioButton = document.getElementById('audioButton');
+            let isAudioPlaying = false; // Track audio state
+
+            // SVG icons for the audio button
+            const playIconSVG = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
+                </svg>`;
+            const muteIconSVG = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z" />
+                </svg>`;
+
+            // Function to update the audio button's icon and ARIA label
+            function updateAudioButtonIcon() {
+                if (isAudioPlaying) {
+                    audioButton.innerHTML = muteIconSVG;
+                    audioButton.setAttribute('aria-label', 'Mute Background Music');
+                } else {
+                    audioButton.innerHTML = playIconSVG;
+                    audioButton.setAttribute('aria-label', 'Play Background Music');
+                }
+            }
+            updateAudioButtonIcon(); // Set initial icon state
+
+            // Event listener for the audio button
+            audioButton.addEventListener('click', () => {
+                if (isAudioPlaying) {
+                    audioPlayer.pause();
+                } else {
+                    // Attempt to play audio. Browsers might block autoplay initially.
+                    audioPlayer.play().catch(error => {
+                        console.error("Error playing background audio:", error);
+                    });
+                }
+                isAudioPlaying = !isAudioPlaying; // Toggle the state
+                updateAudioButtonIcon(); // Update the button icon
+            });
+
+            // --- Promo Video Mute/Unmute Logic ---
+            const promoPlayer = document.getElementById('promoPlayer');
+            const mutePromoVideoButton = document.getElementById('mutePromoVideoButton');
+
+            if (promoPlayer && mutePromoVideoButton) {
+                promoPlayer.muted = false; 
+                mutePromoVideoButton.textContent = 'Mute Video'; 
+
+                mutePromoVideoButton.addEventListener('click', () => {
+                    promoPlayer.muted = !promoPlayer.muted; 
+                    mutePromoVideoButton.textContent = promoPlayer.muted ? 'Unmute Video' : 'Mute Video'; 
+                });
+            } else {
+                console.warn("Promo video player or its mute button not found. Check element IDs: 'promoPlayer', 'mutePromoVideoButton'.");
+            }
+
+            // --- Smooth Scrolling for Anchor Links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault(); 
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth' 
+                        });
+                    }
+                });
+            });
+
+            // --- Gallery Image Click to Enlarge Logic ---
+            document.querySelectorAll('.gallery-item img').forEach(img => {
+                img.addEventListener('click', function() {
+                    this.classList.toggle('clicked');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
